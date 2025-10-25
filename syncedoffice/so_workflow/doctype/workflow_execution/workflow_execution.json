@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "autoname": "format:WE-{workflow}-{#####}",
+ "creation": "2025-01-21 01:21:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "workflow",
+  "workflow_version",
+  "status",
+  "trigger_node",
+  "section_break_timing",
+  "started_at",
+  "finished_at",
+  "duration",
+  "section_break_data",
+  "input_data",
+  "output_data",
+  "error_message",
+  "section_break_execution",
+  "execution_log"
+ ],
+ "fields": [
+  {
+   "fieldname": "workflow",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Workflow",
+   "options": "SO Workflow",
+   "reqd": 1
+  },
+  {
+   "fieldname": "workflow_version",
+   "fieldtype": "Int",
+   "label": "Workflow Version"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Running\nSuccess\nFailed\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "trigger_node",
+   "fieldtype": "Data",
+   "label": "Trigger Node"
+  },
+  {
+   "fieldname": "section_break_timing",
+   "fieldtype": "Section Break",
+   "label": "Timing"
+  },
+  {
+   "fieldname": "started_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Started At"
+  },
+  {
+   "fieldname": "finished_at",
+   "fieldtype": "Datetime",
+   "label": "Finished At"
+  },
+  {
+   "fieldname": "duration",
+   "fieldtype": "Float",
+   "label": "Duration (seconds)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "section_break_data",
+   "fieldtype": "Section Break",
+   "label": "Data"
+  },
+  {
+   "fieldname": "input_data",
+   "fieldtype": "JSON",
+   "label": "Input Data"
+  },
+  {
+   "fieldname": "output_data",
+   "fieldtype": "JSON",
+   "label": "Output Data"
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Long Text",
+   "label": "Error Message"
+  },
+  {
+   "fieldname": "section_break_execution",
+   "fieldtype": "Section Break",
+   "label": "Execution Log"
+  },
+  {
+   "fieldname": "execution_log",
+   "fieldtype": "JSON",
+   "label": "Execution Log"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-21 01:21:00.000000",
+ "modified_by": "Administrator",
+ "module": "SO Workflow",
+ "name": "Workflow Execution",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Workflow Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

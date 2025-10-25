@@ -1,0 +1,238 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:node_type_name",
+ "creation": "2025-01-21 04:40:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "node_type_name",
+  "display_name",
+  "description",
+  "category",
+  "icon",
+  "icon_color",
+  "section_break_config",
+  "version",
+  "group",
+  "subtitle",
+  "section_break_behavior",
+  "inputs",
+  "outputs",
+  "properties",
+  "credentials",
+  "section_break_execution",
+  "execute_method",
+  "polling",
+  "trigger",
+  "webhook",
+  "section_break_advanced",
+  "max_nodes",
+  "defaults",
+  "hints",
+  "section_break_metadata",
+  "is_custom",
+  "module_path",
+  "created_by",
+  "modified_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "node_type_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Node Type Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "display_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Display Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Category",
+   "options": "Core\nTrigger\nAction\nTransform\nCondition\nIntegration\nCustom",
+   "reqd": 1
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Icon"
+  },
+  {
+   "fieldname": "icon_color",
+   "fieldtype": "Color",
+   "label": "Icon Color"
+  },
+  {
+   "fieldname": "section_break_config",
+   "fieldtype": "Section Break",
+   "label": "Configuration"
+  },
+  {
+   "default": "1",
+   "fieldname": "version",
+   "fieldtype": "Int",
+   "label": "Version"
+  },
+  {
+   "fieldname": "group",
+   "fieldtype": "Data",
+   "label": "Group"
+  },
+  {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "label": "Subtitle"
+  },
+  {
+   "fieldname": "section_break_behavior",
+   "fieldtype": "Section Break",
+   "label": "Node Behavior"
+  },
+  {
+   "fieldname": "inputs",
+   "fieldtype": "JSON",
+   "label": "Inputs Configuration"
+  },
+  {
+   "fieldname": "outputs",
+   "fieldtype": "JSON",
+   "label": "Outputs Configuration"
+  },
+  {
+   "fieldname": "properties",
+   "fieldtype": "JSON",
+   "label": "Properties"
+  },
+  {
+   "fieldname": "credentials",
+   "fieldtype": "JSON",
+   "label": "Credentials"
+  },
+  {
+   "fieldname": "section_break_execution",
+   "fieldtype": "Section Break",
+   "label": "Execution"
+  },
+  {
+   "fieldname": "execute_method",
+   "fieldtype": "Select",
+   "label": "Execute Method",
+   "options": "\nPython Function\nJavaScript Code\nHTTP Request\nFrappe API\nCustom Module"
+  },
+  {
+   "default": "0",
+   "fieldname": "polling",
+   "fieldtype": "Check",
+   "label": "Polling"
+  },
+  {
+   "default": "0",
+   "fieldname": "trigger",
+   "fieldtype": "Check",
+   "label": "Trigger"
+  },
+  {
+   "default": "0",
+   "fieldname": "webhook",
+   "fieldtype": "Check",
+   "label": "Webhook"
+  },
+  {
+   "fieldname": "section_break_advanced",
+   "fieldtype": "Section Break",
+   "label": "Advanced"
+  },
+  {
+   "default": "0",
+   "fieldname": "max_nodes",
+   "fieldtype": "Int",
+   "label": "Max Nodes (0 = unlimited)"
+  },
+  {
+   "fieldname": "defaults",
+   "fieldtype": "JSON",
+   "label": "Defaults"
+  },
+  {
+   "fieldname": "hints",
+   "fieldtype": "JSON",
+   "label": "Hints"
+  },
+  {
+   "fieldname": "section_break_metadata",
+   "fieldtype": "Section Break",
+   "label": "Metadata"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_custom",
+   "fieldtype": "Check",
+   "label": "Is Custom"
+  },
+  {
+   "fieldname": "module_path",
+   "fieldtype": "Data",
+   "label": "Module Path"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modified_by",
+   "fieldtype": "Link",
+   "label": "Modified By",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-21 04:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "SO Workflow",
+ "name": "Workflow Node Type",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Workflow Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

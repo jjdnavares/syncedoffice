@@ -1,0 +1,277 @@
+[
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.httpRequest",
+    "display_name": "HTTP Request",
+    "description": "Makes an HTTP request and returns the response",
+    "category": "Core",
+    "icon": "fa-globe",
+    "icon_color": "#2196F3",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main"],
+    "outputs": ["main"],
+    "execute_method": "HTTP Request",
+    "properties": [
+      {
+        "displayName": "Method",
+        "name": "method",
+        "type": "options",
+        "options": [
+          {"name": "GET", "value": "GET"},
+          {"name": "POST", "value": "POST"},
+          {"name": "PUT", "value": "PUT"},
+          {"name": "DELETE", "value": "DELETE"},
+          {"name": "PATCH", "value": "PATCH"}
+        ],
+        "default": "GET",
+        "required": true,
+        "description": "The HTTP method to use"
+      },
+      {
+        "displayName": "URL",
+        "name": "url",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "placeholder": "https://api.example.com/endpoint",
+        "description": "The URL to make the request to"
+      },
+      {
+        "displayName": "Authentication",
+        "name": "authentication",
+        "type": "options",
+        "options": [
+          {"name": "None", "value": "none"},
+          {"name": "Basic Auth", "value": "basic"},
+          {"name": "Bearer Token", "value": "bearer"}
+        ],
+        "default": "none",
+        "description": "Authentication method"
+      },
+      {
+        "displayName": "Headers",
+        "name": "headers",
+        "type": "json",
+        "default": {},
+        "description": "Request headers"
+      },
+      {
+        "displayName": "Body",
+        "name": "body",
+        "type": "json",
+        "default": {},
+        "description": "Request body (for POST, PUT, PATCH)"
+      }
+    ],
+    "defaults": {
+      "name": "HTTP Request"
+    }
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.set",
+    "display_name": "Set",
+    "description": "Sets values on items and optionally remove other values",
+    "category": "Core",
+    "icon": "fa-pen",
+    "icon_color": "#00A86B",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main"],
+    "outputs": ["main"],
+    "execute_method": "Python Function",
+    "properties": [
+      {
+        "displayName": "Keep Only Set",
+        "name": "keepOnlySet",
+        "type": "boolean",
+        "default": false,
+        "description": "If only the values set on this node should be kept and all others removed"
+      },
+      {
+        "displayName": "Values to Set",
+        "name": "values",
+        "type": "json",
+        "default": {},
+        "required": true,
+        "description": "The values to set"
+      }
+    ],
+    "defaults": {
+      "name": "Set"
+    }
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.if",
+    "display_name": "IF",
+    "description": "Routes items based on conditions",
+    "category": "Condition",
+    "icon": "fa-code-branch",
+    "icon_color": "#FF6D5A",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main"],
+    "outputs": ["main", "main"],
+    "execute_method": "Python Function",
+    "properties": [
+      {
+        "displayName": "Conditions",
+        "name": "conditions",
+        "type": "json",
+        "default": [],
+        "required": true,
+        "description": "The conditions to check"
+      }
+    ],
+    "defaults": {
+      "name": "IF"
+    }
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.merge",
+    "display_name": "Merge",
+    "description": "Merges data from multiple streams into one",
+    "category": "Transform",
+    "icon": "fa-code-merge",
+    "icon_color": "#FF6D5A",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main", "main"],
+    "outputs": ["main"],
+    "execute_method": "Python Function",
+    "properties": [
+      {
+        "displayName": "Mode",
+        "name": "mode",
+        "type": "options",
+        "options": [
+          {"name": "Append", "value": "append"},
+          {"name": "Merge", "value": "merge"}
+        ],
+        "default": "append",
+        "description": "How to merge the data"
+      }
+    ],
+    "defaults": {
+      "name": "Merge"
+    }
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.code",
+    "display_name": "Code",
+    "description": "Run custom Python code",
+    "category": "Core",
+    "icon": "fa-code",
+    "icon_color": "#00A86B",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main"],
+    "outputs": ["main"],
+    "execute_method": "Python Function",
+    "properties": [
+      {
+        "displayName": "Mode",
+        "name": "mode",
+        "type": "options",
+        "options": [
+          {"name": "Run Once for All Items", "value": "runOnceForAllItems"},
+          {"name": "Run Once for Each Item", "value": "runOnceForEachItem"}
+        ],
+        "default": "runOnceForAllItems",
+        "description": "How to run the code"
+      },
+      {
+        "displayName": "Python Code",
+        "name": "code",
+        "type": "string",
+        "default": "# Access input data via input_data variable\n# Set output via output variable\noutput = input_data",
+        "required": true,
+        "description": "The Python code to execute"
+      }
+    ],
+    "defaults": {
+      "name": "Code"
+    }
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "frappe.api",
+    "display_name": "Frappe API",
+    "description": "Execute Frappe API operations",
+    "category": "Integration",
+    "icon": "fa-database",
+    "icon_color": "#4CAF50",
+    "version": 1,
+    "group": "transform",
+    "inputs": ["main"],
+    "outputs": ["main"],
+    "execute_method": "Frappe API",
+    "properties": [
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "options": [
+          {"name": "Get Document", "value": "get_doc"},
+          {"name": "Get List", "value": "get_list"},
+          {"name": "Insert", "value": "insert"},
+          {"name": "Update", "value": "update"},
+          {"name": "Delete", "value": "delete"}
+        ],
+        "default": "get_doc",
+        "required": true,
+        "description": "The operation to perform"
+      },
+      {
+        "displayName": "DocType",
+        "name": "doctype",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The DocType to operate on"
+      },
+      {
+        "displayName": "Document Name",
+        "name": "doc_name",
+        "type": "string",
+        "default": "",
+        "description": "The name of the document (for get_doc, update, delete)"
+      },
+      {
+        "displayName": "Filters",
+        "name": "filters",
+        "type": "json",
+        "default": {},
+        "description": "Filters for get_list operation"
+      },
+      {
+        "displayName": "Fields",
+        "name": "fields",
+        "type": "json",
+        "default": [],
+        "description": "Fields to return (for get_list)"
+      },
+      {
+        "displayName": "Document Data",
+        "name": "doc_data",
+        "type": "json",
+        "default": {},
+        "description": "Document data (for insert, update)"
+      },
+      {
+        "displayName": "Limit",
+        "name": "limit",
+        "type": "number",
+        "default": 20,
+        "description": "Number of records to return (for get_list)"
+      }
+    ],
+    "defaults": {
+      "name": "Frappe API"
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "name": "syncedoffice",
+  "version": "1.0.0",
+  "description": "Your one-stop shop for digital automation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd workflow && yarn install",
+    "dev": "cd workflow && yarn dev",
+    "build": "cd workflow && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

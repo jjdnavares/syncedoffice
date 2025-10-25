@@ -1,0 +1,62 @@
+{
+ "app": "syncedoffice",
+ "charts": [],
+ "content": "[{\"id\":\"Ea5M1Z7Ytg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Workflow Builder\",\"col\":3}},{\"id\":\"jOIG8fX_JM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Writer\",\"col\":3}},{\"id\":\"97-Ka6wWzN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Content Manager\",\"col\":3}},{\"id\":\"Jji_xMmq4L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"E9XRAJBAWG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ECommerce Doctype\",\"col\":3}},{\"id\":\"JzQ1CeWfDx\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Automation</span>\",\"col\":12}}]",
+ "creation": "2025-10-21 03:43:41.857084",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "branch",
+ "idx": 1,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Automation",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2025-10-22 01:50:25.203020",
+ "modified_by": "Administrator",
+ "module": "SO Workflow",
+ "name": "Automation",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 24.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Workflow Builder",
+   "type": "URL",
+   "url": "/workflow/"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Writer",
+   "type": "URL",
+   "url": "/writer/"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Content Manager",
+   "type": "URL",
+   "url": "/content-manager/"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "ECommerce Doctype",
+   "link_to": "SO Workflow",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Automation",
+ "type": "Workspace"
+}

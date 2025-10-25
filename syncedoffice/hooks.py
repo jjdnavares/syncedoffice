@@ -4,6 +4,7 @@ app_publisher = "jumes.dev"
 app_description = "Your one-stop shop for digital automation."
 app_email = "jumes.dev@gmail.com"
 app_license = "mit"
+app_route = "/app/automation" #"/app"
 
 # Apps
 # ------------------
@@ -11,15 +12,15 @@ app_license = "mit"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "syncedoffice",
-# 		"logo": "/assets/syncedoffice/logo.png",
-# 		"title": "SyncedOffice",
-# 		"route": "/syncedoffice",
-# 		"has_permission": "syncedoffice.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": app_name,
+		"logo": "/assets/syncedoffice/logo.svg",
+		"title": app_title,
+		"route": app_route,
+		"has_permission": "syncedoffice.api.permission.has_app_permission"
+	}
+]
 
 # Includes in <head>
 # ------------------
@@ -245,3 +246,14 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+# Fixtures
+# --------
+fixtures = [
+	{
+		"dt": "Workflow Node Type",
+		"filters": [["is_custom", "=", 0]]
+	},
+	"syncedoffice.so_workflow.fixtures.node_types"
+]
+
+website_route_rules = [{'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'}, {'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'},]

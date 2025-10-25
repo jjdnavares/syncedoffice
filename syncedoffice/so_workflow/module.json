@@ -1,0 +1,8 @@
+{
+ "name": "SO Workflow",
+ "app_name": "syncedoffice",
+ "label": "SO Workflow",
+ "icon": "octicon octicon-workflow",
+ "color": "#3B82F6",
+ "description": "Workflow automation and orchestration"
+}
