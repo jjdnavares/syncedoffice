@@ -2,3 +2,4 @@ SO Workflow
 SO Writer
 SO CMS
 SO ECommerce
+SO CRM

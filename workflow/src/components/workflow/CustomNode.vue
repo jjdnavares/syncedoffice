@@ -1,37 +1,70 @@
 <template>
-  <!-- Modern trigger manually node -->
-  <div v-if="isTriggerManually" class="trigger-manual-node">
+  <!-- n8n-style trigger node -->
+  <div 
+    v-if="isTriggerManually" 
+    class="n8n-trigger-node"
+    :class="{
+      'node-selected': selected,
+      'node-executing': data.isExecuting,
+      'node-error': data.hasError,
+      'node-success': data.executionSuccess,
+      'node-hovered': isHovered
+    }"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+  >
     <Handle 
       type="target" 
       :position="Position.Left" 
-      class="modern-handle modern-handle-hidden"
+      class="n8n-handle n8n-handle-target"
     />
     
-    <!-- Lightning bolt badge -->
-    <div class="trigger-badge">
-      <Zap :size="16" class="text-white" fill="currentColor" />
+    <!-- Trigger button wrapper (left side) -->
+    <div class="trigger-action-wrapper">
+      <!-- Bolt icon (default state) -->
+      <div class="bolt-icon">
+        <Zap :size="20" class="text-blue-600" fill="currentColor" />
+      </div>
+      
+      <!-- Execute button (hover state) -->
+      <button 
+        class="execute-button"
+        :disabled="data.isExecuting"
+        @click.stop="handleExecute"
+      >
+        <FlaskConical :size="16" />
+        <span>Execute Workflow</span>
+      </button>
     </div>
     
     <!-- Main node body -->
-    <div class="trigger-node-body">
-      <MousePointer :size="56" class="text-gray-300" strokeWidth="1.5" />
+    <div class="n8n-trigger-body">
+      <component 
+        :is="nodeIcon" 
+        :size="40" 
+        :class="nodeColor"
+      />
     </div>
     
-    <!-- Connection handle with plus icon -->
-    <div class="trigger-connection-wrapper">
-      <Handle 
-        type="source" 
-        :position="Position.Right" 
-        class="modern-handle modern-handle-source"
-      />
-      <div class="trigger-plus-icon">
-        <Plus :size="14" class="text-gray-500" strokeWidth="2" />
+    <!-- Status icons -->
+    <div v-if="data.isExecuting || data.hasError || data.executionSuccess" class="status-icons">
+      <div v-if="data.isExecuting" class="execution-spinner">
+        <div class="spinner"></div>
       </div>
+      <AlertCircle v-else-if="data.hasError" :size="16" class="text-red-500" />
+      <CheckCircle v-else-if="data.executionSuccess" :size="16" class="text-green-500" />
     </div>
+    
+    <Handle 
+      type="source" 
+      :position="Position.Right" 
+      class="n8n-handle n8n-handle-source"
+    />
     
     <!-- Label below node -->
-    <div class="trigger-node-label">
-      When clicking 'Execute workflow'
+    <div class="node-description">
+      <div class="node-label">{{ data.label }}</div>
+      <div v-if="data.type" class="node-subtitle">{{ data.type }}</div>
     </div>
   </div>
   
@@ -184,11 +217,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
 import { 
   Zap, Code, GitBranch, Database, Mail, Webhook, Box,
-  AlertCircle, CheckCircle, MousePointer, Plus, Bot
+  AlertCircle, CheckCircle, MousePointer, Plus, Bot, FlaskConical
 } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -201,6 +234,14 @@ const props = defineProps({
     default: false
   }
 })
+
+const emit = defineEmits(['execute'])
+
+const isHovered = ref(false)
+
+function handleExecute() {
+  emit('execute', props.data.id)
+}
 
 const isTriggerManually = computed(() => {
   return props.data.type === 'trigger-manual' ||
@@ -401,120 +442,194 @@ const nodeIconBg = computed(() => {
   }
 }
 
-/* Modern Trigger Manually Node - Light Theme */
-.trigger-manual-node {
+/* n8n-style Trigger Node */
+.n8n-trigger-node {
+  --node-width: 100px;
+  --node-height: 100px;
+  --border-width: 2px;
+  --trigger-radius: 36px;
+  
   position: relative;
+  width: var(--node-width);
+  height: var(--node-height);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 150px;
+  justify-content: center;
 }
 
-.trigger-node-body {
-  width: 140px;
-  height: 140px;
-  background: #4b5563;
-  border: 3px solid #6b7280;
-  border-radius: 20px;
+.n8n-trigger-body {
+  width: 100%;
+  height: 100%;
+  background: white;
+  border: var(--border-width) solid #e5e7eb;
+  border-radius: var(--trigger-radius) 8px 8px var(--trigger-radius);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.trigger-node-body:hover {
-  border-color: #9ca3af;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transform: translateY(-2px);
+.n8n-trigger-node:hover .n8n-trigger-body {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
-.trigger-badge {
+/* Node States */
+.n8n-trigger-node.node-selected .n8n-trigger-body {
+  box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+.n8n-trigger-node.node-executing .n8n-trigger-body {
+  background-color: #fef3c7;
+  border-color: #f59e0b;
+}
+
+.n8n-trigger-node.node-error .n8n-trigger-body {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.n8n-trigger-node.node-success .n8n-trigger-body {
+  border-color: #10b981;
+}
+
+/* Trigger Action Wrapper (Left Side) */
+.trigger-action-wrapper {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
-}
-
-.trigger-connection-wrapper {
-  position: absolute;
-  right: -20px;
+  right: 100%;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 6px;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.trigger-plus-icon {
-  width: 24px;
-  height: 24px;
-  background: white;
-  border: 2px solid #d1d5db;
-  border-radius: 6px;
+/* Bolt Icon (Default State) */
+.bolt-icon {
+  padding: 8px;
+  opacity: 1;
+  translate: 0 0;
+  transition: translate 0.1s ease-in, opacity 0.1s ease-in;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.trigger-plus-icon:hover {
-  border-color: #3b82f6;
-  background: #eff6ff;
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+.n8n-trigger-node.node-hovered .bolt-icon {
+  translate: -12px 0;
+  opacity: 0;
 }
 
-.trigger-node-label {
-  margin-top: 16px;
+/* Execute Button (Hover State) */
+.execute-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #1f2937;
-  text-align: center;
-  max-width: 180px;
-  line-height: 1.5;
+  cursor: pointer;
+  margin-right: 12px;
+  opacity: 0;
+  translate: -12px 0;
+  transition: all 0.1s ease-in;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
 }
 
-/* Modern Handle Styles */
-.modern-handle {
-  width: 14px;
-  height: 14px;
+.n8n-trigger-node.node-hovered .execute-button {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: all;
+}
+
+.execute-button:hover:not(:disabled) {
+  background: #2563eb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.execute-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Status Icons */
+.status-icons {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Node Description (Below Node) */
+.node-description {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  min-width: 200px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.node-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  line-height: 1.4;
+}
+
+.node-subtitle {
+  font-size: 12px;
+  text-align: center;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* n8n Handle Styles */
+.n8n-handle {
+  width: 12px;
+  height: 12px;
   background: white;
   border: 2px solid #9ca3af;
   border-radius: 50%;
   transition: all 0.2s ease;
 }
 
-.modern-handle:hover {
-  width: 18px;
-  height: 18px;
+.n8n-handle:hover {
+  width: 16px;
+  height: 16px;
   border-color: #3b82f6;
   background: #dbeafe;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.modern-handle-hidden {
-  opacity: 0;
-  pointer-events: none;
+.n8n-handle-target {
+  left: -6px;
 }
 
-.modern-handle-target {
-  left: -7px;
-}
-
-.modern-handle-source {
-  position: relative;
-  right: auto;
-  left: auto;
+.n8n-handle-source {
+  right: -6px;
 }
 
 /* AI Agent Node - Horizontal with Sub-connections */

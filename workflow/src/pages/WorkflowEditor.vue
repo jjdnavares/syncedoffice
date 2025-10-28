@@ -299,6 +299,7 @@
           @edges-change="onEdgesChange"
           @connect="onConnect"
           @node-click="onNodeClick"
+          @edge-click="onEdgeClick"
           @pane-click="onPaneClick"
           @drop="onDrop"
           @dragover="onDragOver"
@@ -315,6 +316,23 @@
           
           <template #node-custom="{ data, selected }">
             <CustomNode :data="data" :selected="selected" />
+          </template>
+          
+          <template #edge-default="props">
+            <BaseEdge :id="props.id" :style="props.style" :path="props.path[0]" :marker-end="props.markerEnd" />
+            <EdgeLabelRenderer>
+              <button
+                :style="{
+                  position: 'absolute',
+                  transform: `translate(-50%, -50%) translate(${props.labelX}px,${props.labelY}px)`,
+                  pointerEvents: 'all',
+                }"
+                class="edge-delete-button"
+                @click.stop="() => deleteEdgeById(props.id)"
+              >
+                <Trash2 :size="14" />
+              </button>
+            </EdgeLabelRenderer>
           </template>
         </VueFlow>
       </div>
@@ -404,7 +422,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
+import { VueFlow, useVueFlow, BaseEdge, EdgeLabelRenderer } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -423,6 +441,7 @@ const vueFlowRef = ref(null)
 
 const showExecutionResult = ref(false)
 const executionResult = ref(null)
+const selectedEdge = ref(null)
 const selectedNodeData = ref({})
 const selectedNodeParameters = ref('{}')
 const draggedNodeType = ref(null)
@@ -705,85 +724,22 @@ function handleKeyDown(event) {
     event.preventDefault()
     duplicateSelectedNode()
   }
-  // Delete or Backspace for delete
-  else if ((event.key === 'Delete' || event.key === 'Backspace') && workflowStore.selectedNode) {
-    event.preventDefault()
-    deleteSelectedNode()
+  // Delete or Backspace
+  if (event.key === 'Delete' || event.key === 'Backspace') {
+    deleteSelectedItem()
   }
-  // Ctrl/Cmd + S for save
-  else if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+  
+  // Escape to deselect
+  if (event.key === 'Escape') {
+    workflowStore.selectedNode = null
+    selectedEdge.value = null
+  }
+  
+  // Ctrl/Cmd + S to save
+  if ((event.ctrlKey || event.metaKey) && event.key === 's') {
     event.preventDefault()
     saveWorkflow()
   }
-}
-
-function addNode(nodeType, position = null) {
-  const nodePosition = position || {
-    x: Math.random() * 400 + 100,
-    y: Math.random() * 300 + 100
-  }
-  
-  workflowStore.addNode({
-    type: nodeType.type,
-    label: nodeType.label,
-    position: nodePosition,
-    parameters: {}
-  })
-}
-
-// Drag and drop handlers
-function onDragStart(event, nodeType) {
-  if (event.dataTransfer) {
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('application/vueflow', JSON.stringify(nodeType))
-    draggedNodeType.value = nodeType
-  }
-}
-
-function onDragOver(event) {
-  event.preventDefault()
-  if (event.dataTransfer) {
-    event.dataTransfer.dropEffect = 'move'
-  }
-}
-
-function onDrop(event) {
-  if (!vueFlowRef.value) return
-  
-  const nodeType = draggedNodeType.value
-  if (!nodeType) return
-  
-  const { project } = vueFlowRef.value
-  const position = project({
-    x: event.clientX,
-    y: event.clientY
-  })
-  
-  addNode(nodeType, position)
-  draggedNodeType.value = null
-}
-
-// Canvas controls
-function fitView() {
-  if (vueFlowRef.value) {
-    vueFlowRef.value.fitView({ padding: 0.2 })
-  }
-}
-
-function zoomIn() {
-  if (vueFlowRef.value) {
-    vueFlowRef.value.zoomIn()
-  }
-}
-
-function zoomOut() {
-  if (vueFlowRef.value) {
-    vueFlowRef.value.zoomOut()
-  }
-}
-
-function undo() {
-  workflowStore.undo()
 }
 
 function redo() {
@@ -841,6 +797,42 @@ function onNodeClick(event) {
 
 function onPaneClick() {
   workflowStore.selectedNode = null
+  selectedEdge.value = null
+}
+
+function onEdgeClick(event) {
+  // Deselect any selected node
+  workflowStore.selectedNode = null
+  // Select the clicked edge
+  selectedEdge.value = event.edge
+  
+  // Update edge selection state in the store
+  workflowStore.edges = workflowStore.edges.map(edge => ({
+    ...edge,
+    selected: edge.id === event.edge.id
+  }))
+}
+
+function deleteSelectedEdge() {
+  if (selectedEdge.value) {
+    workflowStore.removeEdge(selectedEdge.value.id)
+    selectedEdge.value = null
+  }
+}
+
+function deleteEdgeById(edgeId) {
+  workflowStore.removeEdge(edgeId)
+  if (selectedEdge.value?.id === edgeId) {
+    selectedEdge.value = null
+  }
+}
+
+function deleteSelectedItem() {
+  if (selectedEdge.value) {
+    deleteSelectedEdge()
+  } else if (workflowStore.selectedNode) {
+    deleteSelectedNode()
+  }
 }
 
 function updateSelectedNode() {
@@ -866,6 +858,32 @@ function deleteSelectedNode() {
     workflowStore.removeNode(workflowStore.selectedNode.id)
     workflowStore.selectedNode = null
   }
+}
+
+function addNode(nodeType) {
+  const position = {
+    x: Math.random() * 400 + 100,
+    y: Math.random() * 300 + 100
+  }
+  
+  workflowStore.addNode({
+    type: nodeType.type,
+    label: nodeType.label,
+    position: position,
+    data: {
+      type: nodeType.type,
+      label: nodeType.label,
+      description: nodeType.description,
+      icon: nodeType.icon,
+      color: nodeType.color,
+      parameters: {}
+    }
+  })
+  
+  // Close the node pane after adding
+  showNodePane.value = false
+  showAppTriggers.value = false
+  showAdvancedTriggers.value = false
 }
 
 async function saveWorkflow() {
@@ -913,10 +931,14 @@ async function executeWorkflow() {
 }
 
 /* Edge styling */
+.vue-flow__edge {
+  cursor: pointer;
+}
+
 .vue-flow__edge-path {
   stroke: #9ca3af;
   stroke-width: 2;
-  transition: stroke 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .vue-flow__edge:hover .vue-flow__edge-path {
@@ -924,10 +946,22 @@ async function executeWorkflow() {
   stroke-width: 3;
 }
 
-.vue-flow__edge.selected .vue-flow__edge-path,
+.vue-flow__edge.selected .vue-flow__edge-path {
+  stroke: #3b82f6;
+  stroke-width: 3;
+  stroke-dasharray: 5, 5;
+  animation: dash 0.5s linear infinite;
+}
+
 .vue-flow__edge.animated .vue-flow__edge-path {
   stroke: #3b82f6;
   stroke-width: 2.5;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -10;
+  }
 }
 
 .vue-flow__edge-textwrapper {
@@ -937,6 +971,44 @@ async function executeWorkflow() {
 .vue-flow__edge-text {
   fill: #374151;
   font-size: 12px;
+}
+
+/* Edge delete button */
+.edge-delete-button {
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 2px solid #ef4444;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vue-flow__edge:hover .edge-delete-button,
+.vue-flow__edge.selected .edge-delete-button {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.edge-delete-button:hover {
+  background: #ef4444;
+  transform: scale(1.15);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+.edge-delete-button svg {
+  stroke: #ef4444;
+  transition: stroke 0.2s ease;
+}
+
+.edge-delete-button:hover svg {
+  stroke: white;
 }
 
 /* Handle styling */
