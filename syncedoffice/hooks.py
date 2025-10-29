@@ -256,4 +256,7 @@ fixtures = [
 	"syncedoffice.so_workflow.fixtures.node_types"
 ]
 
-website_route_rules = [{'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'}, {'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'},]
+website_route_rules = [
+	{'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'},
+	{'from_route': '/cms/<path:app_path>', 'to_route': 'cms'},
+]
