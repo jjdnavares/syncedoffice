@@ -1,7 +1,7 @@
 {
  "app": "syncedoffice",
  "charts": [],
- "content": "[{\"id\":\"5gqXgoAq0j\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Writer</span>\",\"col\":12}}]",
+ "content": "[{\"id\":\"a7PZOEnI3f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Writer\",\"col\":3}},{\"id\":\"IqhzaKQKml\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"History\",\"col\":3}}]",
  "creation": "2025-10-21 03:47:57.714944",
  "custom_blocks": [],
  "docstatus": 0,
@@ -15,7 +15,7 @@
  "label": "Writer",
  "link_type": "DocType",
  "links": [],
- "modified": "2025-10-22 04:21:43.978195",
+ "modified": "2025-10-30 04:42:21.569263",
  "modified_by": "Administrator",
  "module": "SO Workflow",
  "name": "Writer",
@@ -26,7 +26,22 @@
  "quick_lists": [],
  "roles": [],
  "sequence_id": 26.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Writer",
+   "type": "URL",
+   "url": "/writer"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "History",
+   "type": "URL",
+   "url": "/writer/history/"
+  }
+ ],
  "title": "Writer",
  "type": "Workspace"
 }
