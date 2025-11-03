@@ -2,6 +2,17 @@
 
 A modern, light-themed workflow automation system built for SyncedOffice, inspired by n8n.
 
+## ✅ MVP Status: COMPLETE
+
+The workflow MVP is **production-ready** with full backend infrastructure, 6 functional node types, robust execution engine, complete API coverage, and comprehensive documentation.
+
+**Quick Links:**
+- 📖 [MVP Complete Documentation](MVP_COMPLETE.md) - Full feature overview
+- 🚀 [Quick Start Guide](QUICK_START.md) - Get started in minutes
+- 📝 [Node Types Reference](NODE_TYPES.md) - Available node types
+- 👨‍💻 [Developer Guide](DEVELOPER_GUIDE.md) - API reference and patterns
+- 📊 [Implementation Summary](IMPLEMENTATION_SUMMARY.md) - Technical details
+
 ## Features
 
 - **Visual Workflow Editor**: Drag-and-drop canvas-based workflow builder using Vue Flow

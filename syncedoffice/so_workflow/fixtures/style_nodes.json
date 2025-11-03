@@ -1,0 +1,782 @@
+[
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.httpRequest",
+    "display_name": "HTTP Request",
+    "description": "Makes an HTTP request and returns the received data",
+    "category": "Core",
+    "group": "transform",
+    "icon": "fa:globe",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1, 1.1, 1.2, 1.3, 1.4],
+    "defaults": {
+      "name": "HTTP Request",
+      "color": "#909298"
+    },
+    "codex": {
+      "alias": ["API Call", "REST", "Webhook", "HTTP"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Data Sources", "Helpers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/"
+          }
+        ]
+      }
+    },
+    "inputs": [
+      {
+        "type": "main",
+        "displayName": "",
+        "required": false,
+        "maxConnections": 1
+      }
+    ],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Method",
+        "name": "method",
+        "type": "options",
+        "options": [
+          {"name": "DELETE", "value": "DELETE"},
+          {"name": "GET", "value": "GET"},
+          {"name": "HEAD", "value": "HEAD"},
+          {"name": "OPTIONS", "value": "OPTIONS"},
+          {"name": "PATCH", "value": "PATCH"},
+          {"name": "POST", "value": "POST"},
+          {"name": "PUT", "value": "PUT"}
+        ],
+        "default": "GET",
+        "description": "The request method to use"
+      },
+      {
+        "displayName": "URL",
+        "name": "url",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "placeholder": "https://example.com/api",
+        "description": "The URL to make the request to"
+      },
+      {
+        "displayName": "Authentication",
+        "name": "authentication",
+        "type": "options",
+        "options": [
+          {"name": "None", "value": "none"},
+          {"name": "Basic Auth", "value": "basicAuth"},
+          {"name": "Header Auth", "value": "headerAuth"},
+          {"name": "OAuth2", "value": "oAuth2"}
+        ],
+        "default": "none",
+        "description": "The authentication method to use"
+      },
+      {
+        "displayName": "Send Body",
+        "name": "sendBody",
+        "type": "boolean",
+        "default": false,
+        "description": "Whether the request has a body",
+        "displayOptions": {
+          "show": {
+            "method": ["POST", "PUT", "PATCH"]
+          }
+        }
+      },
+      {
+        "displayName": "Body Content Type",
+        "name": "bodyContentType",
+        "type": "options",
+        "options": [
+          {"name": "JSON", "value": "json"},
+          {"name": "Form Data", "value": "form"},
+          {"name": "Raw", "value": "raw"}
+        ],
+        "default": "json",
+        "displayOptions": {
+          "show": {
+            "sendBody": [true]
+          }
+        }
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Timeout",
+            "name": "timeout",
+            "type": "number",
+            "default": 10000,
+            "description": "Time in ms to wait for a response"
+          },
+          {
+            "displayName": "Response Format",
+            "name": "responseFormat",
+            "type": "options",
+            "options": [
+              {"name": "JSON", "value": "json"},
+              {"name": "String", "value": "string"},
+              {"name": "File", "value": "file"}
+            ],
+            "default": "json"
+          }
+        ]
+      }
+    ],
+    "execute_method": "HTTP Request",
+    "module_path": "syncedoffice.so_workflow.nodes.http_request"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.code",
+    "display_name": "Code",
+    "description": "Run custom JavaScript or Python code",
+    "category": "Core",
+    "group": "transform",
+    "icon": "fa:code",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1, 1.1, 1.2],
+    "defaults": {
+      "name": "Code",
+      "color": "#FF9922"
+    },
+    "codex": {
+      "alias": ["Function", "Script", "JavaScript", "Python"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Data Transformation"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/"
+          }
+        ]
+      }
+    },
+    "inputs": [
+      {
+        "type": "main",
+        "displayName": "",
+        "required": false,
+        "maxConnections": 1
+      }
+    ],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Language",
+        "name": "language",
+        "type": "options",
+        "options": [
+          {"name": "JavaScript", "value": "javaScript"},
+          {"name": "Python", "value": "python"}
+        ],
+        "default": "javaScript",
+        "description": "The programming language to use"
+      },
+      {
+        "displayName": "Mode",
+        "name": "mode",
+        "type": "options",
+        "options": [
+          {"name": "Run Once for All Items", "value": "runOnceForAllItems"},
+          {"name": "Run Once for Each Item", "value": "runOnceForEachItem"}
+        ],
+        "default": "runOnceForAllItems",
+        "description": "How to execute the code"
+      },
+      {
+        "displayName": "JavaScript Code",
+        "name": "jsCode",
+        "type": "string",
+        "typeOptions": {
+          "editor": "jsEditor",
+          "rows": 10
+        },
+        "default": "// Code here\nreturn items;",
+        "description": "JavaScript code to execute",
+        "displayOptions": {
+          "show": {
+            "language": ["javaScript"]
+          }
+        }
+      },
+      {
+        "displayName": "Python Code",
+        "name": "pythonCode",
+        "type": "string",
+        "typeOptions": {
+          "editor": "pythonEditor",
+          "rows": 10
+        },
+        "default": "# Code here\nreturn items",
+        "description": "Python code to execute",
+        "displayOptions": {
+          "show": {
+            "language": ["python"]
+          }
+        }
+      }
+    ],
+    "execute_method": "Python Function",
+    "module_path": "syncedoffice.so_workflow.nodes.code"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.set",
+    "display_name": "Set",
+    "description": "Set values on items and optionally remove other values",
+    "category": "Core",
+    "group": "transform",
+    "icon": "fa:pen",
+    "icon_color": "blue",
+    "version": 1,
+    "version_array": [1, 1.1, 1.2, 2, 3, 3.1, 3.2, 3.3, 3.4],
+    "defaults": {
+      "name": "Set",
+      "color": "#0000FF"
+    },
+    "codex": {
+      "alias": ["Map", "Transform", "Edit"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Data Transformation"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/"
+          }
+        ]
+      }
+    },
+    "inputs": [
+      {
+        "type": "main",
+        "displayName": "",
+        "required": true,
+        "maxConnections": 1
+      }
+    ],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Mode",
+        "name": "mode",
+        "type": "options",
+        "options": [
+          {"name": "Manual Mapping", "value": "manual"},
+          {"name": "JSON", "value": "json"}
+        ],
+        "default": "manual",
+        "description": "How to specify the values to set"
+      },
+      {
+        "displayName": "Keep Only Set",
+        "name": "keepOnlySet",
+        "type": "boolean",
+        "default": false,
+        "description": "Whether to keep only the values set on this node and remove all others"
+      },
+      {
+        "displayName": "Values to Set",
+        "name": "values",
+        "type": "fixedCollection",
+        "typeOptions": {
+          "multipleValues": true
+        },
+        "default": {},
+        "options": [
+          {
+            "name": "string",
+            "displayName": "String",
+            "values": [
+              {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "placeholder": "e.g. fieldName",
+                "description": "Name of the field to set"
+              },
+              {
+                "displayName": "Value",
+                "name": "value",
+                "type": "string",
+                "default": "",
+                "description": "Value to set"
+              }
+            ]
+          },
+          {
+            "name": "number",
+            "displayName": "Number",
+            "values": [
+              {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "description": "Name of the field to set"
+              },
+              {
+                "displayName": "Value",
+                "name": "value",
+                "type": "number",
+                "default": 0,
+                "description": "Value to set"
+              }
+            ]
+          },
+          {
+            "displayName": "Boolean",
+            "name": "boolean",
+            "values": [
+              {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "description": "Name of the field to set"
+              },
+              {
+                "displayName": "Value",
+                "name": "value",
+                "type": "boolean",
+                "default": false,
+                "description": "Value to set"
+              }
+            ]
+          }
+        ],
+        "displayOptions": {
+          "show": {
+            "mode": ["manual"]
+          }
+        }
+      },
+      {
+        "displayName": "JSON",
+        "name": "jsonOutput",
+        "type": "json",
+        "default": "{\n  \"key\": \"value\"\n}",
+        "description": "JSON object to set",
+        "displayOptions": {
+          "show": {
+            "mode": ["json"]
+          }
+        }
+      }
+    ],
+    "execute_method": "Python Function",
+    "module_path": "syncedoffice.so_workflow.nodes.set_node"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.if",
+    "display_name": "IF",
+    "description": "Split a workflow conditionally based on comparison operations",
+    "category": "Condition",
+    "group": "transform",
+    "icon": "fa:map-signs",
+    "icon_color": "blue",
+    "version": 1,
+    "version_array": [1, 2],
+    "defaults": {
+      "name": "IF",
+      "color": "#408000"
+    },
+    "codex": {
+      "alias": ["Condition", "Switch", "Route", "Branch"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Flow"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/"
+          }
+        ]
+      }
+    },
+    "inputs": [
+      {
+        "type": "main",
+        "displayName": "",
+        "required": true,
+        "maxConnections": 1
+      }
+    ],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": "true"
+      },
+      {
+        "type": "main",
+        "displayName": "false"
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Conditions",
+        "name": "conditions",
+        "type": "fixedCollection",
+        "typeOptions": {
+          "multipleValues": true
+        },
+        "default": {},
+        "options": [
+          {
+            "name": "condition",
+            "displayName": "Condition",
+            "values": [
+              {
+                "displayName": "Field",
+                "name": "field",
+                "type": "string",
+                "default": "",
+                "placeholder": "e.g. status",
+                "description": "The field to check"
+              },
+              {
+                "displayName": "Operation",
+                "name": "operation",
+                "type": "options",
+                "options": [
+                  {"name": "Equals", "value": "equals"},
+                  {"name": "Not Equals", "value": "notEquals"},
+                  {"name": "Contains", "value": "contains"},
+                  {"name": "Not Contains", "value": "notContains"},
+                  {"name": "Starts With", "value": "startsWith"},
+                  {"name": "Ends With", "value": "endsWith"},
+                  {"name": "Exists", "value": "exists"},
+                  {"name": "Not Exists", "value": "notExists"},
+                  {"name": "Greater Than", "value": "greaterThan"},
+                  {"name": "Less Than", "value": "lessThan"}
+                ],
+                "default": "equals",
+                "description": "The comparison operation"
+              },
+              {
+                "displayName": "Value",
+                "name": "value",
+                "type": "string",
+                "default": "",
+                "description": "The value to compare against",
+                "displayOptions": {
+                  "hide": {
+                    "operation": ["exists", "notExists"]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Combine",
+        "name": "combineOperation",
+        "type": "options",
+        "options": [
+          {"name": "ALL (AND)", "value": "all"},
+          {"name": "ANY (OR)", "value": "any"}
+        ],
+        "default": "all",
+        "description": "How to combine multiple conditions"
+      }
+    ],
+    "execute_method": "Python Function",
+    "module_path": "syncedoffice.so_workflow.nodes.if_node"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.merge",
+    "display_name": "Merge",
+    "description": "Merge data from two branches",
+    "category": "Transform",
+    "group": "transform",
+    "icon": "fa:code-branch",
+    "icon_color": "blue",
+    "version": 1,
+    "version_array": [1, 2, 2.1, 3],
+    "defaults": {
+      "name": "Merge",
+      "color": "#00bbcc"
+    },
+    "codex": {
+      "alias": ["Join", "Combine", "Concat"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Data Transformation"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.merge/"
+          }
+        ]
+      }
+    },
+    "inputs": [
+      {
+        "type": "main",
+        "displayName": "Input 1",
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "type": "main",
+        "displayName": "Input 2",
+        "required": true,
+        "maxConnections": 1
+      }
+    ],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Mode",
+        "name": "mode",
+        "type": "options",
+        "options": [
+          {"name": "Append", "value": "append"},
+          {"name": "Merge By Fields", "value": "mergeByFields"},
+          {"name": "Merge By Position", "value": "mergeByPosition"},
+          {"name": "Multiplex", "value": "multiplex"}
+        ],
+        "default": "append",
+        "description": "How to merge the data"
+      },
+      {
+        "displayName": "Join",
+        "name": "join",
+        "type": "options",
+        "options": [
+          {"name": "Inner Join", "value": "inner"},
+          {"name": "Left Join", "value": "left"},
+          {"name": "Outer Join", "value": "outer"}
+        ],
+        "default": "inner",
+        "description": "How to match the data",
+        "displayOptions": {
+          "show": {
+            "mode": ["mergeByFields"]
+          }
+        }
+      },
+      {
+        "displayName": "Fields to Match",
+        "name": "fieldsToMatch",
+        "type": "fixedCollection",
+        "typeOptions": {
+          "multipleValues": true
+        },
+        "default": {},
+        "options": [
+          {
+            "name": "field",
+            "displayName": "Field",
+            "values": [
+              {
+                "displayName": "Input 1 Field",
+                "name": "field1",
+                "type": "string",
+                "default": "",
+                "description": "Field from input 1"
+              },
+              {
+                "displayName": "Input 2 Field",
+                "name": "field2",
+                "type": "string",
+                "default": "",
+                "description": "Field from input 2"
+              }
+            ]
+          }
+        ],
+        "displayOptions": {
+          "show": {
+            "mode": ["mergeByFields"]
+          }
+        }
+      }
+    ],
+    "execute_method": "Python Function",
+    "module_path": "syncedoffice.so_workflow.nodes.merge_node"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.webhook",
+    "display_name": "Webhook",
+    "description": "Receive data via HTTP webhook",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:satellite-dish",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1, 1.1, 2],
+    "defaults": {
+      "name": "Webhook",
+      "color": "#885577"
+    },
+    "codex": {
+      "alias": ["HTTP", "API", "Endpoint"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Triggers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "HTTP Method",
+        "name": "httpMethod",
+        "type": "options",
+        "options": [
+          {"name": "DELETE", "value": "DELETE"},
+          {"name": "GET", "value": "GET"},
+          {"name": "HEAD", "value": "HEAD"},
+          {"name": "PATCH", "value": "PATCH"},
+          {"name": "POST", "value": "POST"},
+          {"name": "PUT", "value": "PUT"}
+        ],
+        "default": "GET",
+        "description": "The HTTP method to listen to"
+      },
+      {
+        "displayName": "Path",
+        "name": "path",
+        "type": "string",
+        "default": "",
+        "placeholder": "webhook",
+        "required": true,
+        "description": "The path to listen to"
+      },
+      {
+        "displayName": "Authentication",
+        "name": "authentication",
+        "type": "options",
+        "options": [
+          {"name": "None", "value": "none"},
+          {"name": "Basic Auth", "value": "basicAuth"},
+          {"name": "Header Auth", "value": "headerAuth"}
+        ],
+        "default": "none",
+        "description": "The authentication method"
+      },
+      {
+        "displayName": "Response Mode",
+        "name": "responseMode",
+        "type": "options",
+        "options": [
+          {"name": "On Received", "value": "onReceived"},
+          {"name": "Last Node", "value": "lastNode"},
+          {"name": "Using 'Respond to Webhook' Node", "value": "responseNode"}
+        ],
+        "default": "onReceived",
+        "description": "When to respond to the webhook"
+      },
+      {
+        "displayName": "Response Code",
+        "name": "responseCode",
+        "type": "number",
+        "default": 200,
+        "description": "The HTTP response code to return"
+      },
+      {
+        "displayName": "Response Data",
+        "name": "responseData",
+        "type": "string",
+        "default": "firstEntryJson",
+        "description": "What data to return"
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Binary Property",
+            "name": "binaryProperty",
+            "type": "string",
+            "default": "data",
+            "description": "Name of the binary property to write to"
+          },
+          {
+            "displayName": "Ignore Bots",
+            "name": "ignoreBots",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to ignore requests from bots"
+          },
+          {
+            "displayName": "No Response Body",
+            "name": "noResponseBody",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to send a response body"
+          }
+        ]
+      }
+    ],
+    "trigger": true,
+    "webhook": true,
+    "webhooks": [
+      {
+        "name": "default",
+        "httpMethod": "={{$parameter.httpMethod}}",
+        "responseMode": "={{$parameter.responseMode}}",
+        "path": "={{$parameter.path}}"
+      }
+    ],
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.webhook_trigger"
+  }
+]

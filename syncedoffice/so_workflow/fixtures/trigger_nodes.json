@@ -1,0 +1,777 @@
+[
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.manualTrigger",
+    "display_name": "Manual Trigger",
+    "description": "Runs the flow on clicking a button in n8n",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:mouse-pointer",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1],
+    "defaults": {
+      "name": "When clicking 'Execute workflow'",
+      "color": "#909298"
+    },
+    "codex": {
+      "alias": ["Manual", "Test", "Execute"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Triggers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.manualtrigger/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "This node is where the workflow execution starts (when you click the 'test' button on the canvas).<br><br> <a data-action=\"showNodeCreator\">Explore other ways to trigger your workflow</a> (e.g on a schedule, or a webhook)",
+        "name": "notice",
+        "type": "notice",
+        "default": ""
+      }
+    ],
+    "trigger": true,
+    "max_nodes": 1,
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.manual_trigger"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.scheduleTrigger",
+    "display_name": "Schedule Trigger",
+    "description": "Triggers the workflow on a given schedule",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:clock",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1, 1.1, 1.2],
+    "defaults": {
+      "name": "Schedule Trigger",
+      "color": "#31C49F"
+    },
+    "codex": {
+      "alias": ["Cron", "Timer", "Interval", "Schedule"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Triggers", "Schedule"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "This workflow will run on the schedule you define here once you <a data-key=\"activate\">activate</a> it.<br><br>For testing, you can also trigger it manually: by going back to the canvas and clicking 'execute workflow'",
+        "name": "notice",
+        "type": "notice",
+        "default": ""
+      },
+      {
+        "displayName": "Trigger Rules",
+        "name": "rule",
+        "placeholder": "Add Rule",
+        "type": "fixedCollection",
+        "typeOptions": {
+          "multipleValues": true
+        },
+        "default": {
+          "interval": [
+            {
+              "field": "days"
+            }
+          ]
+        },
+        "options": [
+          {
+            "name": "interval",
+            "displayName": "Trigger Interval",
+            "values": [
+              {
+                "displayName": "Trigger Interval",
+                "name": "field",
+                "type": "options",
+                "default": "days",
+                "options": [
+                  {"name": "Seconds", "value": "seconds"},
+                  {"name": "Minutes", "value": "minutes"},
+                  {"name": "Hours", "value": "hours"},
+                  {"name": "Days", "value": "days"},
+                  {"name": "Weeks", "value": "weeks"},
+                  {"name": "Months", "value": "months"},
+                  {"name": "Custom (Cron)", "value": "cronExpression"}
+                ]
+              },
+              {
+                "displayName": "Seconds Between Triggers",
+                "name": "secondsInterval",
+                "type": "number",
+                "default": 30,
+                "displayOptions": {
+                  "show": {
+                    "field": ["seconds"]
+                  }
+                },
+                "description": "Number of seconds between each workflow trigger"
+              },
+              {
+                "displayName": "Minutes Between Triggers",
+                "name": "minutesInterval",
+                "type": "number",
+                "default": 5,
+                "displayOptions": {
+                  "show": {
+                    "field": ["minutes"]
+                  }
+                },
+                "description": "Number of minutes between each workflow trigger"
+              },
+              {
+                "displayName": "Hours Between Triggers",
+                "name": "hoursInterval",
+                "type": "number",
+                "default": 1,
+                "displayOptions": {
+                  "show": {
+                    "field": ["hours"]
+                  }
+                },
+                "description": "Number of hours between each workflow trigger"
+              },
+              {
+                "displayName": "Days Between Triggers",
+                "name": "daysInterval",
+                "type": "number",
+                "default": 1,
+                "displayOptions": {
+                  "show": {
+                    "field": ["days"]
+                  }
+                },
+                "description": "Number of days between each workflow trigger"
+              },
+              {
+                "displayName": "Weeks Between Triggers",
+                "name": "weeksInterval",
+                "type": "number",
+                "default": 1,
+                "displayOptions": {
+                  "show": {
+                    "field": ["weeks"]
+                  }
+                },
+                "description": "Number of weeks between each workflow trigger"
+              },
+              {
+                "displayName": "Months Between Triggers",
+                "name": "monthsInterval",
+                "type": "number",
+                "default": 1,
+                "displayOptions": {
+                  "show": {
+                    "field": ["months"]
+                  }
+                },
+                "description": "Number of months between each workflow trigger"
+              },
+              {
+                "displayName": "Cron Expression",
+                "name": "cronExpression",
+                "type": "string",
+                "default": "* * * * *",
+                "displayOptions": {
+                  "show": {
+                    "field": ["cronExpression"]
+                  }
+                },
+                "description": "Custom cron expression. <a href=\"https://crontab.guru/\" target=\"_blank\">Cron expression generator</a>"
+              },
+              {
+                "displayName": "Trigger at Hour",
+                "name": "triggerAtHour",
+                "type": "number",
+                "default": 0,
+                "displayOptions": {
+                  "show": {
+                    "field": ["days", "weeks", "months"]
+                  }
+                },
+                "description": "Hour of the day to trigger (0-23)"
+              },
+              {
+                "displayName": "Trigger at Minute",
+                "name": "triggerAtMinute",
+                "type": "number",
+                "default": 0,
+                "displayOptions": {
+                  "show": {
+                    "field": ["hours", "days", "weeks", "months"]
+                  }
+                },
+                "description": "Minute of the hour to trigger (0-59)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Timezone",
+            "name": "timezone",
+            "type": "string",
+            "default": "America/New_York",
+            "description": "Timezone for the schedule"
+          }
+        ]
+      }
+    ],
+    "trigger": true,
+    "polling": true,
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.schedule_trigger"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.webhook",
+    "display_name": "Webhook",
+    "description": "Starts the workflow when a webhook is called",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:satellite-dish",
+    "icon_color": "black",
+    "version": 2,
+    "version_array": [1, 1.1, 2, 2.1],
+    "defaults": {
+      "name": "Webhook",
+      "color": "#885577"
+    },
+    "codex": {
+      "alias": ["HTTP", "API", "Endpoint", "REST"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Triggers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Allow Multiple HTTP Methods",
+        "name": "multipleMethods",
+        "type": "boolean",
+        "default": false,
+        "description": "Whether to allow the webhook to listen for multiple HTTP methods"
+      },
+      {
+        "displayName": "HTTP Method",
+        "name": "httpMethod",
+        "type": "options",
+        "options": [
+          {"name": "DELETE", "value": "DELETE"},
+          {"name": "GET", "value": "GET"},
+          {"name": "HEAD", "value": "HEAD"},
+          {"name": "PATCH", "value": "PATCH"},
+          {"name": "POST", "value": "POST"},
+          {"name": "PUT", "value": "PUT"}
+        ],
+        "default": "GET",
+        "description": "The HTTP method to listen to",
+        "displayOptions": {
+          "show": {
+            "multipleMethods": [false]
+          }
+        }
+      },
+      {
+        "displayName": "HTTP Methods",
+        "name": "httpMethods",
+        "type": "multiOptions",
+        "options": [
+          {"name": "DELETE", "value": "DELETE"},
+          {"name": "GET", "value": "GET"},
+          {"name": "HEAD", "value": "HEAD"},
+          {"name": "PATCH", "value": "PATCH"},
+          {"name": "POST", "value": "POST"},
+          {"name": "PUT", "value": "PUT"}
+        ],
+        "default": ["GET", "POST"],
+        "description": "The HTTP methods to listen to",
+        "displayOptions": {
+          "show": {
+            "multipleMethods": [true]
+          }
+        }
+      },
+      {
+        "displayName": "Path",
+        "name": "path",
+        "type": "string",
+        "default": "",
+        "placeholder": "webhook",
+        "required": true,
+        "description": "The path to listen to, dynamic values could be specified by using ':', e.g. 'your-path/:dynamic-value'"
+      },
+      {
+        "displayName": "Authentication",
+        "name": "authentication",
+        "type": "options",
+        "options": [
+          {"name": "None", "value": "none"},
+          {"name": "Basic Auth", "value": "basicAuth"},
+          {"name": "Header Auth", "value": "headerAuth"}
+        ],
+        "default": "none",
+        "description": "The authentication method to use"
+      },
+      {
+        "displayName": "Response Mode",
+        "name": "responseMode",
+        "type": "options",
+        "options": [
+          {"name": "On Received", "value": "onReceived", "description": "Returns directly with a predefined message"},
+          {"name": "Last Node", "value": "lastNode", "description": "Returns data of the last-executed node"},
+          {"name": "Using 'Respond to Webhook' Node", "value": "responseNode", "description": "Response defined in that node"}
+        ],
+        "default": "onReceived",
+        "description": "When and how to respond to the webhook"
+      },
+      {
+        "displayName": "Insert a 'Respond to Webhook' node to control when and how you respond. <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.respondtowebhook/\" target=\"_blank\">More details</a>",
+        "name": "webhookNotice",
+        "type": "notice",
+        "displayOptions": {
+          "show": {
+            "responseMode": ["responseNode"]
+          }
+        },
+        "default": ""
+      },
+      {
+        "displayName": "Response Code",
+        "name": "responseCode",
+        "type": "number",
+        "default": 200,
+        "description": "The HTTP response code to return",
+        "displayOptions": {
+          "show": {
+            "responseMode": ["onReceived"]
+          }
+        }
+      },
+      {
+        "displayName": "Response Data",
+        "name": "responseData",
+        "type": "options",
+        "options": [
+          {"name": "First Entry JSON", "value": "firstEntryJson"},
+          {"name": "First Entry Binary", "value": "firstEntryBinary"},
+          {"name": "All Entries", "value": "allEntries"},
+          {"name": "No Response Body", "value": "noData"}
+        ],
+        "default": "firstEntryJson",
+        "description": "What data to return",
+        "displayOptions": {
+          "show": {
+            "responseMode": ["lastNode"]
+          }
+        }
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Binary Property",
+            "name": "binaryProperty",
+            "type": "string",
+            "default": "data",
+            "description": "Name of the binary property to write to"
+          },
+          {
+            "displayName": "Ignore Bots",
+            "name": "ignoreBots",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to ignore requests from bots like link previewers and web crawlers"
+          },
+          {
+            "displayName": "IP(s) Whitelist",
+            "name": "ipWhitelist",
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated list of IP addresses or ranges to allow"
+          },
+          {
+            "displayName": "Raw Body",
+            "name": "rawBody",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to return the raw body instead of parsing it"
+          }
+        ]
+      }
+    ],
+    "trigger": true,
+    "webhook": true,
+    "webhooks": [
+      {
+        "name": "default",
+        "httpMethod": "={{$parameter.multipleMethods ? $parameter.httpMethods : [$parameter.httpMethod]}}",
+        "responseMode": "={{$parameter.responseMode}}",
+        "path": "={{$parameter.path}}"
+      }
+    ],
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.webhook_trigger"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.emailReadImap",
+    "display_name": "Email Trigger (IMAP)",
+    "description": "Triggers the workflow when a new email is received",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:inbox",
+    "icon_color": "black",
+    "version": 2,
+    "version_array": [1, 2, 2.1],
+    "defaults": {
+      "name": "Email Trigger (IMAP)",
+      "color": "#44AA22"
+    },
+    "codex": {
+      "alias": ["Email", "IMAP", "Mail", "Inbox"],
+      "categories": ["Communication"],
+      "subcategories": {
+        "Communication": ["Triggers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.emailreadimap/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Mailbox Name",
+        "name": "mailbox",
+        "type": "string",
+        "default": "INBOX",
+        "required": true,
+        "description": "Name of the mailbox to read from"
+      },
+      {
+        "displayName": "Action",
+        "name": "postProcessAction",
+        "type": "options",
+        "options": [
+          {"name": "Mark as Read", "value": "read"},
+          {"name": "Nothing", "value": "nothing"},
+          {"name": "Move to Folder", "value": "move"},
+          {"name": "Delete", "value": "delete"}
+        ],
+        "default": "read",
+        "description": "What to do with the email after it has been processed"
+      },
+      {
+        "displayName": "Folder Name",
+        "name": "moveToFolder",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "postProcessAction": ["move"]
+          }
+        },
+        "description": "Name of the folder to move the email to"
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Custom Email Rules",
+            "name": "customEmailConfig",
+            "type": "string",
+            "default": "UNSEEN",
+            "description": "Custom IMAP search criteria"
+          },
+          {
+            "displayName": "Download Attachments",
+            "name": "downloadAttachments",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to download email attachments"
+          },
+          {
+            "displayName": "Force Reconnect",
+            "name": "forceReconnect",
+            "type": "number",
+            "default": 60,
+            "description": "Sets an interval (in minutes) to force reconnection"
+          }
+        ]
+      }
+    ],
+    "trigger": true,
+    "polling": true,
+    "credentials": [
+      {
+        "name": "imap",
+        "required": true
+      }
+    ],
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.email_imap_trigger"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "frappe.doctype.trigger",
+    "display_name": "Frappe DocType Trigger",
+    "description": "Triggers when a Frappe DocType event occurs (save, submit, cancel, delete)",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:database",
+    "icon_color": "orange",
+    "version": 1,
+    "version_array": [1],
+    "defaults": {
+      "name": "Frappe DocType Trigger",
+      "color": "#FF6B35"
+    },
+    "codex": {
+      "alias": ["DocType", "Frappe", "Event", "Hook"],
+      "categories": ["Integration"],
+      "subcategories": {
+        "Integration": ["Frappe", "Triggers"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://frappeframework.com/docs/user/en/api/hooks"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "DocType",
+        "name": "doctype",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "placeholder": "e.g. Sales Order",
+        "description": "The DocType to watch for events"
+      },
+      {
+        "displayName": "Event",
+        "name": "event",
+        "type": "options",
+        "options": [
+          {"name": "After Insert", "value": "after_insert"},
+          {"name": "Before Save", "value": "before_save"},
+          {"name": "After Save", "value": "after_save"},
+          {"name": "Before Submit", "value": "before_submit"},
+          {"name": "After Submit", "value": "after_submit"},
+          {"name": "Before Cancel", "value": "before_cancel"},
+          {"name": "After Cancel", "value": "after_cancel"},
+          {"name": "Before Delete", "value": "before_delete"},
+          {"name": "After Delete", "value": "after_delete"},
+          {"name": "On Update", "value": "on_update"},
+          {"name": "On Trash", "value": "on_trash"}
+        ],
+        "default": "after_save",
+        "required": true,
+        "description": "The event to trigger on"
+      },
+      {
+        "displayName": "Conditions",
+        "name": "conditions",
+        "type": "fixedCollection",
+        "typeOptions": {
+          "multipleValues": true
+        },
+        "placeholder": "Add Condition",
+        "default": {},
+        "description": "Conditions to filter which documents trigger the workflow",
+        "options": [
+          {
+            "name": "condition",
+            "displayName": "Condition",
+            "values": [
+              {
+                "displayName": "Field",
+                "name": "field",
+                "type": "string",
+                "default": "",
+                "placeholder": "e.g. status",
+                "description": "The field to check"
+              },
+              {
+                "displayName": "Operation",
+                "name": "operation",
+                "type": "options",
+                "options": [
+                  {"name": "Equals", "value": "equals"},
+                  {"name": "Not Equals", "value": "notEquals"},
+                  {"name": "Contains", "value": "contains"},
+                  {"name": "In", "value": "in"},
+                  {"name": "Changed", "value": "changed"}
+                ],
+                "default": "equals",
+                "description": "The comparison operation"
+              },
+              {
+                "displayName": "Value",
+                "name": "value",
+                "type": "string",
+                "default": "",
+                "description": "The value to compare against"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Options",
+        "name": "options",
+        "type": "collection",
+        "placeholder": "Add Option",
+        "default": {},
+        "options": [
+          {
+            "displayName": "Include Document",
+            "name": "includeDocument",
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to include the full document in the trigger data"
+          },
+          {
+            "displayName": "Include Changes",
+            "name": "includeChanges",
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to include changed fields (for update events)"
+          }
+        ]
+      }
+    ],
+    "trigger": true,
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.frappe_doctype_trigger"
+  },
+  {
+    "doctype": "Workflow Node Type",
+    "node_type_name": "n8n-nodes-base.executeWorkflowTrigger",
+    "display_name": "Execute Workflow Trigger",
+    "description": "Triggers when called by an Execute Workflow node from another workflow",
+    "category": "Trigger",
+    "group": "trigger",
+    "icon": "fa:sign-in-alt",
+    "icon_color": "black",
+    "version": 1,
+    "version_array": [1],
+    "defaults": {
+      "name": "Execute Workflow Trigger",
+      "color": "#ff6d5a"
+    },
+    "codex": {
+      "alias": ["Sub-workflow", "Call", "Invoke"],
+      "categories": ["Core"],
+      "subcategories": {
+        "Core": ["Triggers", "Flow"]
+      },
+      "resources": {
+        "primaryDocumentation": [
+          {
+            "url": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.executeworkflowtrigger/"
+          }
+        ]
+      }
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "main",
+        "displayName": ""
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "This node will be triggered when this workflow is called by an 'Execute Workflow' node from another workflow",
+        "name": "notice",
+        "type": "notice",
+        "default": ""
+      }
+    ],
+    "trigger": true,
+    "max_nodes": 1,
+    "execute_method": "Custom Module",
+    "module_path": "syncedoffice.so_workflow.nodes.triggers.execute_workflow_trigger"
+  }
+]

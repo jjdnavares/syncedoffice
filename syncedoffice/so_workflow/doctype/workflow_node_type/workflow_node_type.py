@@ -41,23 +41,28 @@ class WorkflowNodeType(Document):
                 frappe.throw("Properties must be a list")
 
     def get_node_definition(self):
-        """Get complete node definition for execution"""
+        """Get complete node definition for execution (n8n-compatible)"""
         return {
             "name": self.node_type_name,
             "displayName": self.display_name,
             "description": self.description,
             "category": self.category,
             "version": self.version,
+            "versionArray": self._parse_json(self.version_array) or [self.version],
             "icon": self.icon,
             "iconColor": self.icon_color,
             "group": self.group,
             "subtitle": self.subtitle,
+            "codex": self._parse_json(self.codex) or {},
+            "webhooks": self._parse_json(self.webhooks) or [],
             "inputs": self._parse_json(self.inputs) or [],
             "outputs": self._parse_json(self.outputs) or [],
             "properties": self._parse_json(self.properties) or [],
             "credentials": self._parse_json(self.credentials) or [],
             "defaults": self._parse_json(self.defaults) or {},
             "hints": self._parse_json(self.hints) or [],
+            "displayOptions": self._parse_json(self.display_options) or {},
+            "typeOptions": self._parse_json(self.type_options) or {},
             "executeMethod": self.execute_method,
             "polling": self.polling,
             "trigger": self.trigger,
@@ -135,3 +140,52 @@ def save_node_type(node_type_data):
     frappe.db.commit()
     
     return doc.get_node_definition()
+
+
+@frappe.whitelist()
+def get_node_types_for_editor():
+    """Get node types formatted for the workflow editor frontend"""
+    if not frappe.has_permission("Workflow Node Type", "read"):
+        frappe.throw("Not permitted", frappe.PermissionError)
+    
+    node_types = frappe.get_all(
+        "Workflow Node Type",
+        fields=["name", "node_type_name", "display_name", "description", 
+                "category", "icon", "icon_color", "version", "group", "trigger"],
+        order_by="category, display_name"
+    )
+    
+    # Organize by category
+    organized = {
+        "triggers": [],
+        "actions": [],
+        "core": [],
+        "transform": [],
+        "condition": [],
+        "integration": [],
+        "custom": []
+    }
+    
+    for node_type in node_types:
+        category = node_type.get("category", "Custom").lower()
+        
+        # Map to frontend structure
+        frontend_node = {
+            "type": node_type.get("node_type_name"),
+            "label": node_type.get("display_name"),
+            "description": node_type.get("description", ""),
+            "icon": node_type.get("icon", "Code"),
+            "color": node_type.get("icon_color", "text-gray-600"),
+            "category": node_type.get("category"),
+            "isTrigger": node_type.get("trigger", 0) == 1
+        }
+        
+        # Add to appropriate category
+        if node_type.get("trigger"):
+            organized["triggers"].append(frontend_node)
+        elif category in organized:
+            organized[category].append(frontend_node)
+        else:
+            organized["custom"].append(frontend_node)
+    
+    return organized

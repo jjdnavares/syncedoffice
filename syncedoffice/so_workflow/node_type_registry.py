@@ -27,11 +27,11 @@ class NodeTypeRegistry:
         node_types = frappe.get_all(
             "Workflow Node Type",
             fields=["name", "node_type_name", "display_name", "category", 
-                    "version", "execute_method", "module_path", "is_custom",
+                    "version", "version_array", "execute_method", "module_path", "is_custom",
                     "inputs", "outputs", "properties", "credentials", 
                     "defaults", "hints", "icon", "icon_color", "group",
-                    "subtitle", "polling", "trigger", "webhook", "max_nodes",
-                    "description"]
+                    "subtitle", "polling", "trigger", "webhook", "webhooks", "max_nodes",
+                    "description", "codex", "display_options", "type_options"]
         )
         
         for node_type in node_types:
@@ -43,8 +43,10 @@ class NodeTypeRegistry:
         """Register a single node type"""
         node_type_name = node_type_data.get("node_type_name")
         
-        # Parse JSON fields
-        for field in ['inputs', 'outputs', 'properties', 'credentials', 'defaults', 'hints']:
+        # Parse JSON fields (including new n8n fields)
+        json_fields = ['inputs', 'outputs', 'properties', 'credentials', 'defaults', 'hints',
+                       'version_array', 'codex', 'webhooks', 'display_options', 'type_options']
+        for field in json_fields:
             if node_type_data.get(field):
                 try:
                     if isinstance(node_type_data[field], str):

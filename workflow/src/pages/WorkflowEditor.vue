@@ -315,7 +315,12 @@
           <MiniMap />
           
           <template #node-custom="{ data, selected }">
-            <CustomNode :data="data" :selected="selected" />
+            <CustomNode 
+              :data="data" 
+              :selected="selected" 
+              @execute="handleNodeExecute"
+              @chatAction="handleChatAction"
+            />
           </template>
           
           <template #edge-default="props">
@@ -429,7 +434,7 @@ import { MiniMap } from '@vue-flow/minimap'
 import { 
   ArrowLeft, Play, Save, Trash2, X,
   Zap, GitBranch, Code, Database, Mail, Webhook,
-  Maximize2, ZoomIn, ZoomOut, Undo, Redo, Copy
+  Maximize2, ZoomIn, ZoomOut, Undo, Redo, Copy, MousePointer, MessageCircle
 } from 'lucide-vue-next'
 import { useWorkflowStore } from '@/stores/workflow'
 import CustomNode from '@/components/workflow/CustomNode.vue'
@@ -476,10 +481,10 @@ const appTriggerNodes = [
 const triggerTypes = [
   {
     type: 'trigger-manual',
-    label: 'Trigger manually',
+    label: 'When clicking \'Execute workflow\'',
     description: 'Runs the flow on clicking a button in n8n. Good for getting started quickly',
-    icon: Zap,
-    color: 'text-yellow-600'
+    icon: MousePointer,
+    color: 'text-gray-400'
   },
   {
     type: 'trigger-app',
@@ -518,10 +523,10 @@ const triggerTypes = [
     color: 'text-orange-600'
   },
   {
-    type: 'trigger-chat',
-    label: 'On chat message',
+    type: 'chat-trigger',
+    label: 'When chat message received',
     description: 'Runs the flow when a user sends a chat message. For use with AI nodes',
-    icon: Mail,
+    icon: MessageCircle,
     color: 'text-pink-600'
   },
   {
@@ -884,6 +889,21 @@ function addNode(nodeType) {
   showNodePane.value = false
   showAppTriggers.value = false
   showAdvancedTriggers.value = false
+}
+
+function handleNodeExecute(nodeId) {
+  console.log('Execute node:', nodeId)
+  // Find the node and trigger execution
+  const node = workflowStore.nodes.find(n => n.id === nodeId)
+  if (node) {
+    executeWorkflow()
+  }
+}
+
+function handleChatAction(nodeId) {
+  console.log('Open chat for node:', nodeId)
+  // TODO: Implement chat panel/modal
+  alert('Chat interface would open here. This can be connected to a chat UI component.')
 }
 
 async function saveWorkflow() {
