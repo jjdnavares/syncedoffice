@@ -14,8 +14,12 @@
   "icon_color",
   "section_break_config",
   "version",
+  "version_array",
   "group",
   "subtitle",
+  "section_break_n8n",
+  "codex",
+  "webhooks",
   "section_break_behavior",
   "inputs",
   "outputs",
@@ -30,6 +34,8 @@
   "max_nodes",
   "defaults",
   "hints",
+  "display_options",
+  "type_options",
   "section_break_metadata",
   "is_custom",
   "module_path",
@@ -87,14 +93,39 @@
    "label": "Version"
   },
   {
+   "fieldname": "version_array",
+   "fieldtype": "JSON",
+   "label": "Version Array",
+   "description": "Array of supported versions (e.g. [1, 1.1, 1.2])"
+  },
+  {
    "fieldname": "group",
-   "fieldtype": "Data",
-   "label": "Group"
+   "fieldtype": "Select",
+   "label": "Group",
+   "options": "\ntransform\ntrigger\ninput\noutput",
+   "description": "Node group for categorization"
   },
   {
    "fieldname": "subtitle",
    "fieldtype": "Data",
    "label": "Subtitle"
+  },
+  {
+   "fieldname": "section_break_n8n",
+   "fieldtype": "Section Break",
+   "label": "n8n Compatibility"
+  },
+  {
+   "fieldname": "codex",
+   "fieldtype": "JSON",
+   "label": "Codex",
+   "description": "n8n codex metadata: alias, categories, subcategories, resources"
+  },
+  {
+   "fieldname": "webhooks",
+   "fieldtype": "JSON",
+   "label": "Webhooks",
+   "description": "Webhook configurations for trigger nodes"
   },
   {
    "fieldname": "section_break_behavior",
@@ -170,6 +201,18 @@
    "fieldname": "hints",
    "fieldtype": "JSON",
    "label": "Hints"
+  },
+  {
+   "fieldname": "display_options",
+   "fieldtype": "JSON",
+   "label": "Display Options",
+   "description": "Conditional display logic for properties (show/hide)"
+  },
+  {
+   "fieldname": "type_options",
+   "fieldtype": "JSON",
+   "label": "Type Options",
+   "description": "Additional options for field types (editor, multipleValues, etc.)"
   },
   {
    "fieldname": "section_break_metadata",

@@ -256,15 +256,18 @@ export const useWorkflowStore = defineStore('workflow', () => {
   }
 
   function addNode(nodeData) {
+    const nodeId = `node_${Date.now()}`
     const newNode = {
-      id: `node_${Date.now()}`,
-      type: 'custom',
+      id: nodeId,
+      type: 'custom', // All nodes use 'custom' type for VueFlow rendering
       position: nodeData.position || { x: 100, y: 100 },
       data: {
+        id: nodeId,
         label: nodeData.label || 'New Node',
-        type: nodeData.type || 'default',
+        type: nodeData.type || 'default', // This is the actual node type (chat-trigger, etc.)
         parameters: nodeData.parameters || {},
-        ...nodeData
+        // Merge additional data from nodeData.data if provided
+        ...(nodeData.data || {})
       }
     }
     

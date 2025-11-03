@@ -1,4 +1,63 @@
 <template>
+  <!-- Message/Chat trigger node -->
+  <div 
+    v-if="isChatTrigger" 
+    class="chat-trigger-node"
+    :class="{
+      'node-selected': selected,
+      'node-executing': data.isExecuting,
+      'node-error': data.hasError,
+      'node-success': data.executionSuccess,
+      'node-hovered': isHovered
+    }"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+  >
+    <Handle 
+      type="target" 
+      :position="Position.Left" 
+      class="chat-handle chat-handle-target"
+    />
+    
+    <!-- Main node body with message icon -->
+    <div class="chat-node-body">
+      <MessageCircle :size="48" class="text-white" :stroke-width="1.5" />
+    </div>
+    
+    <!-- Action button (appears on hover) -->
+    <div class="chat-action-wrapper">
+      <button 
+        class="chat-action-button"
+        :disabled="data.isExecuting"
+        @click.stop="handleChatAction"
+      >
+        <MessageCircle :size="16" />
+        <span>Open chat</span>
+      </button>
+    </div>
+    
+    <!-- Status icons -->
+    <div v-if="data.isExecuting || data.hasError || data.executionSuccess" class="status-icons">
+      <div v-if="data.isExecuting" class="execution-spinner">
+        <div class="spinner"></div>
+      </div>
+      <AlertCircle v-else-if="data.hasError" :size="16" class="text-red-500" />
+      <CheckCircle v-else-if="data.executionSuccess" :size="16" class="text-green-500" />
+    </div>
+    
+    <Handle 
+      type="source" 
+      :position="Position.Right" 
+      class="chat-handle chat-handle-source"
+    />
+    
+    <!-- Label below node -->
+    <div class="node-description">
+      <div class="node-label">{{ data.label }}</div>
+      <div v-if="data.type" class="node-subtitle">{{ data.type }}</div>
+    </div>
+  </div>
+  
   <!-- n8n-style trigger node -->
   <div 
     v-if="isTriggerManually" 
@@ -41,8 +100,9 @@
     <div class="n8n-trigger-body">
       <component 
         :is="nodeIcon" 
-        :size="40" 
-        :class="nodeColor"
+        :size="48" 
+        class="text-white"
+        :stroke-width="1.5"
       />
     </div>
     
@@ -221,7 +281,7 @@ import { computed, ref } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
 import { 
   Zap, Code, GitBranch, Database, Mail, Webhook, Box,
-  AlertCircle, CheckCircle, MousePointer, Plus, Bot, FlaskConical
+  AlertCircle, CheckCircle, MousePointer, Plus, Bot, FlaskConical, MessageCircle
 } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -235,7 +295,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['execute'])
+const emit = defineEmits(['execute', 'chatAction'])
 
 const isHovered = ref(false)
 
@@ -243,11 +303,41 @@ function handleExecute() {
   emit('execute', props.data.id)
 }
 
-const isTriggerManually = computed(() => {
+function handleChatAction() {
+  emit('chatAction', props.data.id)
+}
+
+// Check if it's a chat/message trigger
+const isChatTrigger = computed(() => {
+  return props.data.type === 'chat-trigger' ||
+         props.data.type === 'message-trigger' ||
+         props.data.nodeType === 'chat_trigger' ||
+         props.data.label?.toLowerCase().includes('chat message') ||
+         props.data.label?.toLowerCase().includes('when chat') ||
+         props.data.label?.toLowerCase().includes('message received')
+})
+
+// Check if it's a manual trigger specifically
+const isManualTrigger = computed(() => {
   return props.data.type === 'trigger-manual' ||
+         props.data.nodeType === 'trigger_manually' ||
          props.data.label?.toLowerCase().includes('trigger manually') ||
          props.data.label?.toLowerCase().includes('manual trigger') ||
-         props.data.nodeType === 'trigger_manually'
+         props.data.label?.toLowerCase().includes('clicking')
+})
+
+// Check if it's any trigger node (for styling)
+const isTriggerManually = computed(() => {
+  const isTrigger = props.data.type === 'trigger' ||
+                    props.data.type?.startsWith('trigger-') ||
+                    props.data.nodeType?.includes('trigger') ||
+                    props.data.label?.toLowerCase().includes('trigger') ||
+                    props.data.label?.toLowerCase().includes('schedule') ||
+                    props.data.label?.toLowerCase().includes('webhook') ||
+                    props.data.label?.toLowerCase().includes('on ') ||
+                    props.data.label?.toLowerCase().includes('when ')
+  
+  return isTrigger
 })
 
 const isAIAgent = computed(() => {
@@ -258,6 +348,11 @@ const isAIAgent = computed(() => {
 })
 
 const nodeIcon = computed(() => {
+  // Manual trigger gets MousePointer icon
+  if (isManualTrigger.value) {
+    return MousePointer
+  }
+  
   const iconMap = {
     trigger: Zap,
     action: Webhook,
@@ -446,8 +541,8 @@ const nodeIconBg = computed(() => {
 .n8n-trigger-node {
   --node-width: 100px;
   --node-height: 100px;
-  --border-width: 2px;
-  --trigger-radius: 36px;
+  --border-width: 3px;
+  --trigger-radius: 24px;
   
   position: relative;
   width: var(--node-width);
@@ -460,40 +555,61 @@ const nodeIconBg = computed(() => {
 .n8n-trigger-body {
   width: 100%;
   height: 100%;
-  background: white;
-  border: var(--border-width) solid #e5e7eb;
-  border-radius: var(--trigger-radius) 8px 8px var(--trigger-radius);
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: var(--border-width) solid #718096;
+  border-radius: var(--trigger-radius);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.n8n-trigger-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--trigger-radius) - var(--border-width));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  pointer-events: none;
 }
 
 .n8n-trigger-node:hover .n8n-trigger-body {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: #a0aec0;
 }
 
 /* Node States */
 .n8n-trigger-node.node-selected .n8n-trigger-body {
-  box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4);
   border-color: #3b82f6;
 }
 
 .n8n-trigger-node.node-executing .n8n-trigger-body {
-  background-color: #fef3c7;
-  border-color: #f59e0b;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #fbbf24;
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .n8n-trigger-node.node-error .n8n-trigger-body {
   border-color: #ef4444;
-  background: #fef2f2;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
 .n8n-trigger-node.node-success .n8n-trigger-body {
   border-color: #10b981;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
 }
 
 /* Trigger Action Wrapper (Left Side) */
@@ -510,17 +626,28 @@ const nodeIconBg = computed(() => {
 
 /* Bolt Icon (Default State) */
 .bolt-icon {
-  padding: 8px;
+  padding: 6px;
   opacity: 1;
   translate: 0 0;
-  transition: translate 0.1s ease-in, opacity 0.1s ease-in;
+  transition: translate 0.15s ease-out, opacity 0.15s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #fca5a5;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  box-shadow: 0 2px 8px rgba(252, 165, 165, 0.6);
+  margin-right: 8px;
+}
+
+.bolt-icon svg {
+  color: white !important;
+  fill: white;
 }
 
 .n8n-trigger-node.node-hovered .bolt-icon {
-  translate: -12px 0;
+  translate: -16px 0;
   opacity: 0;
 }
 
@@ -530,18 +657,18 @@ const nodeIconBg = computed(() => {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  margin-right: 12px;
+  margin-right: 16px;
   opacity: 0;
-  translate: -12px 0;
-  transition: all 0.1s ease-in;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  translate: -16px 0;
+  transition: all 0.15s ease-out;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
   white-space: nowrap;
 }
 
@@ -552,8 +679,13 @@ const nodeIconBg = computed(() => {
 }
 
 .execute-button:hover:not(:disabled) {
-  background: #2563eb;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+  transform: translateY(-1px);
+}
+
+.execute-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .execute-button:disabled {
@@ -574,34 +706,34 @@ const nodeIconBg = computed(() => {
 /* Node Description (Below Node) */
 .node-description {
   position: absolute;
-  top: 100%;
-  width: 100%;
-  min-width: 200px;
-  margin-top: 8px;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   pointer-events: none;
 }
 
 .node-label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   text-align: center;
   color: #1f2937;
+  text-shadow: none;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  white-space: nowrap;
   line-height: 1.4;
 }
 
 .node-subtitle {
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   color: #6b7280;
+  text-shadow: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -747,5 +879,149 @@ const nodeIconBg = computed(() => {
 .ai-sub-plus:hover {
   border-color: #9333ea;
   background: #f3e8ff;
+}
+
+/* Chat/Message Trigger Node */
+.chat-trigger-node {
+  --node-width: 100px;
+  --node-height: 100px;
+  --border-width: 2px;
+  
+  position: relative;
+  width: var(--node-width);
+  height: var(--node-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-node-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: var(--border-width) solid #718096;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.chat-node-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(24px - var(--border-width));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  pointer-events: none;
+}
+
+.chat-trigger-node:hover .chat-node-body {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: #a0aec0;
+}
+
+/* Chat Node States */
+.chat-trigger-node.node-selected .chat-node-body {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-color: #3b82f6;
+}
+
+.chat-trigger-node.node-executing .chat-node-body {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #fbbf24;
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.chat-trigger-node.node-error .chat-node-body {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.chat-trigger-node.node-success .chat-node-body {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* Chat Action Wrapper (Right Side) */
+.chat-action-wrapper {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Chat Action Button (Hover State) */
+.chat-action-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 16px;
+  opacity: 0;
+  translate: -16px 0;
+  transition: all 0.15s ease-out;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+  white-space: nowrap;
+}
+
+.chat-trigger-node.node-hovered .chat-action-button {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: all;
+}
+
+.chat-action-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.5);
+  transform: translateY(-1px);
+}
+
+.chat-action-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.chat-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Chat Handle Styles */
+.chat-handle {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 2px solid #9ca3af;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.chat-handle:hover {
+  width: 16px;
+  height: 16px;
+  border-color: #3b82f6;
+  background: #dbeafe;
+}
+
+.chat-handle-target {
+  left: -6px;
+}
+
+.chat-handle-source {
+  right: -6px;
 }
 </style>
