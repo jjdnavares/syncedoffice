@@ -15,7 +15,7 @@
  "label": "Automation",
  "link_type": "DocType",
  "links": [],
- "modified": "2025-10-22 01:50:25.203020",
+ "modified": "2025-12-04 02:10:13.633675",
  "modified_by": "Administrator",
  "module": "SO Workflow",
  "name": "Automation",
@@ -32,21 +32,21 @@
    "doc_view": "List",
    "label": "Workflow Builder",
    "type": "URL",
-   "url": "/workflow/"
+   "url": "/automation/workflow/"
   },
   {
    "color": "Grey",
    "doc_view": "List",
    "label": "Writer",
    "type": "URL",
-   "url": "/writer/"
+   "url": "/automation/writer/"
   },
   {
    "color": "Grey",
    "doc_view": "List",
    "label": "Content Manager",
    "type": "URL",
-   "url": "/content-manager/"
+   "url": "/automation/content-manager/"
   },
   {
    "color": "Grey",

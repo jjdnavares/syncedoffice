@@ -1,0 +1,8 @@
+{
+ "name": "SO Writer",
+ "app_name": "syncedoffice",
+ "label": "SO Writer",
+ "icon": "octicon octicon-pencil",
+ "color": "#10B981",
+ "description": "AI-powered content generation and writing assistant"
+}

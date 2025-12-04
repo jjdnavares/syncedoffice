@@ -48,7 +48,7 @@ Vue 3 application with:
 1. Install the app in your Frappe bench
 2. Run migrations: `bench --site [site-name] migrate`
 3. Build frontend: `cd syncedoffice/so_writer/frontend && yarn install && yarn build`
-4. Access at: `http://[site-url]/so_writer`
+4. Access at: `http://[site-url]/writer`
 
 ## Workflow Integration
 

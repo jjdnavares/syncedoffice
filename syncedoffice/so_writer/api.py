@@ -655,3 +655,116 @@ def get_llm_api_key(provider: str):
 
     # No API key found
     return {}
+
+
+@frappe.whitelist()
+def delete_llm_api_key(provider: str):
+    """Delete LLM API key for the specified provider
+    
+    Removes the provider setting row from the user's LLM Settings document.
+    
+    Args:
+        provider (str): The LLM provider name (e.g., 'OpenAI', 'Anthropic')
+
+    Returns:
+        dict: Status of the operation
+    """
+    user = frappe.session.user
+    llm_settings_name = frappe.db.exists("LLM Settings", {"user": user})
+
+    if not llm_settings_name:
+        return {"status": "success", "message": "No settings found for user"}
+
+    doc = frappe.get_doc("LLM Settings", llm_settings_name)
+    
+    # Find and remove the provider setting
+    provider_normalized = provider.lower()
+    settings_to_remove = []
+    
+    for setting in doc.provider_settings:
+        if setting.provider.lower() == provider_normalized:
+            settings_to_remove.append(setting)
+    
+    if not settings_to_remove:
+        return {"status": "success", "message": "Provider setting not found"}
+    
+    for setting in settings_to_remove:
+        doc.remove(setting)
+    
+    doc.save(ignore_permissions=True)
+    
+    return {"status": "success", "message": f"API key for {provider} deleted successfully"}
+
+
+@frappe.whitelist()
+def get_llm_models(provider: str):
+    """Get available models for a specific LLM provider
+    
+    Args:
+        provider (str): The LLM provider name (e.g., 'openai', 'anthropic')
+
+    Returns:
+        list: List of available models with name and label
+    """
+    provider = provider.lower()
+    
+    # Define available models for each provider
+    models_map = {
+        'openai': [
+            {'name': 'gpt-4', 'label': 'GPT-4'},
+            {'name': 'gpt-4-turbo', 'label': 'GPT-4 Turbo'},
+            {'name': 'gpt-3.5-turbo', 'label': 'GPT-3.5 Turbo'},
+        ],
+        'anthropic': [
+            {'name': 'claude-3-opus-20240229', 'label': 'Claude 3 Opus'},
+            {'name': 'claude-3-sonnet-20240229', 'label': 'Claude 3 Sonnet'},
+            {'name': 'claude-3-haiku-20240307', 'label': 'Claude 3 Haiku'},
+        ],
+        'google': [
+            {'name': 'gemini-pro', 'label': 'Gemini Pro'},
+            {'name': 'gemini-pro-vision', 'label': 'Gemini Pro Vision'},
+        ],
+        'cohere': [
+            {'name': 'command', 'label': 'Command'},
+            {'name': 'command-nightly', 'label': 'Command Nightly'},
+            {'name': 'command-light', 'label': 'Command Light'},
+        ],
+        'groq': [
+            {'name': 'llama3-70b-8192', 'label': 'Llama 3 70B'},
+            {'name': 'llama3-8b-8192', 'label': 'Llama 3 8B'},
+            {'name': 'mixtral-8x7b-32768', 'label': 'Mixtral 8x7B'},
+        ],
+        'mistral': [
+            {'name': 'mistral-small', 'label': 'Mistral Small'},
+            {'name': 'mistral-medium', 'label': 'Mistral Medium'},
+            {'name': 'mistral-large', 'label': 'Mistral Large'},
+        ],
+        'ollama': [
+            {'name': 'llama2', 'label': 'Llama 2'},
+            {'name': 'llama3', 'label': 'Llama 3'},
+            {'name': 'mistral', 'label': 'Mistral'},
+            {'name': 'codellama', 'label': 'Code Llama'},
+        ],
+        'perplexity': [
+            {'name': 'llama-3-sonar-small-32k-chat', 'label': 'Llama 3 Sonar Small 32K'},
+            {'name': 'llama-3-sonar-large-32k-chat', 'label': 'Llama 3 Sonar Large 32K'},
+            {'name': 'mixtral-8x7b-instruct', 'label': 'Mixtral 8x7B Instruct'},
+        ],
+        'together': [
+            {'name': 'meta-llama/Llama-2-70b-chat-hf', 'label': 'Llama 2 70B Chat'},
+            {'name': 'meta-llama/Llama-2-13b-chat-hf', 'label': 'Llama 2 13B Chat'},
+            {'name': 'mistralai/Mixtral-8x7B-Instruct-v0.1', 'label': 'Mixtral 8x7B Instruct'},
+        ],
+        'amazon-bedrock': [
+            {'name': 'anthropic.claude-v2', 'label': 'Claude v2'},
+            {'name': 'anthropic.claude-v1', 'label': 'Claude v1'},
+            {'name': 'amazon.titan-text-express-v1', 'label': 'Titan Text Express'},
+        ],
+        'open-router': [
+            {'name': 'openai/gpt-4', 'label': 'GPT-4'},
+            {'name': 'openai/gpt-4-turbo', 'label': 'GPT-4 Turbo'},
+            {'name': 'anthropic/claude-3-opus', 'label': 'Claude 3 Opus'},
+        ],
+    }
+    
+    return models_map.get(provider, [])

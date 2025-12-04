@@ -140,7 +140,7 @@ frontend/
 
 ### 7. Configuration Files
 
-- **hooks.py** - Added route: `/so_writer/<path:app_path>`
+- **hooks.py** - Added route: `/writer/<path:app_path>`
 - **www/so_writer.html** - Entry point for SPA
 - **modules.txt** - Already includes "SO Writer"
 
@@ -197,7 +197,7 @@ doc = generate_content(
 
 ### 3. Frontend Access
 
-Navigate to: `http://[site-url]/so_writer`
+Navigate to: `http://[site-url]/writer`
 
 ## Next Steps
 
@@ -232,7 +232,7 @@ bench --site [site-name] migrate
 
 ### 5. Test the Module
 
-1. Access `/so_writer` in browser
+1. Access `/writer` in browser
 2. Configure LLM provider and API key
 3. Generate test content
 4. Check history page

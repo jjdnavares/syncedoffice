@@ -21,7 +21,7 @@ bench restart
 
 ## 🌐 Access
 
-Navigate to: **`http://[your-site]/so_writer`**
+Navigate to: **`http://[your-site]/writer`**
 
 ## ⚙️ Configuration
 

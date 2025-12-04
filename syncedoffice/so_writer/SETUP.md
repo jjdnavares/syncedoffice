@@ -44,8 +44,8 @@ yarn build
 The build process will:
 - Install all npm dependencies
 - Build the Vue application
-- Copy files to `/home/jumes/bench/apps/syncedoffice/syncedoffice/public/so_writer/`
-- Create the HTML entry point at `/home/jumes/bench/apps/syncedoffice/syncedoffice/www/so_writer.html`
+- Copy files to `/home/jumes/bench/apps/syncedoffice/syncedoffice/public/writer/`
+- Create the HTML entry point at `/home/jumes/bench/apps/syncedoffice/syncedoffice/www/writer.html`
 
 ### 4. Clear Cache and Restart
 
@@ -57,7 +57,7 @@ bench restart
 
 ### 5. Access the Application
 
-Navigate to: `http://[your-site-url]/so_writer`
+Navigate to: `http://[your-site-url]/writer`
 
 ## Configuration
 
@@ -77,7 +77,7 @@ Navigate to: `http://[your-site-url]/so_writer`
 
 ### Via Web Interface
 
-1. Access `/so_writer` in your browser
+1. Access `/writer` in your browser
 2. Select your LLM provider and model
 3. Enter your API key (if not configured system-wide)
 4. Fill in the content generation form:

@@ -1,0 +1,61 @@
+{
+ "app": "syncedoffice",
+ "charts": [],
+ "content": "[{\"id\":\"a7PZOEnI3f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Writer\",\"col\":3}},{\"id\":\"IqhzaKQKml\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"History\",\"col\":3}}]",
+ "creation": "2025-10-21 03:47:57.714944",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "pen",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Writer",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2025-12-04 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SO Writer",
+ "name": "Writer",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 27.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Writer",
+   "type": "URL",
+   "url": "/automation/writer"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "History",
+   "type": "URL",
+   "url": "/automation/writer/history"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Generated Content",
+   "link_to": "Generated Content",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "LLM Settings",
+   "link_to": "LLM Settings",
+   "type": "DocType"
+  }
+ ],
+ "title": "Writer",
+ "type": "Workspace"
+}

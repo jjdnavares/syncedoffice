@@ -32,7 +32,7 @@
    "doc_view": "List",
    "label": "Workflow Builder",
    "type": "URL",
-   "url": "/workflow/"
+   "url": "/automation/workflow"
   },
   {
    "color": "Grey",

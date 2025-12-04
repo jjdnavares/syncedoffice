@@ -257,7 +257,7 @@ fixtures = [
 ]
 
 website_route_rules = [
-	{'from_route': '/workflow/<path:app_path>', 'to_route': 'workflow'},
+	{'from_route': '/automation', 'to_route': 'automation'},
+	{'from_route': '/automation/<path:app_path>', 'to_route': 'automation'},
 	{'from_route': '/cms/<path:app_path>', 'to_route': 'cms'},
-	{'from_route': '/so_writer/<path:app_path>', 'to_route': 'so_writer'},
 ]
